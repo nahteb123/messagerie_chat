@@ -1,0 +1,119 @@
+*{
+    color:#DDDDDD;
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(270deg, #333333,#6c92d8,#333333);
+  background-size: 600% 600%;
+  animation: gradientAnimation 10s ease infinite;
+  color: white;  /* Pour que le texte soit visible sur un fond coloré */
+}
+.bodychat {
+    animation: none;
+    background: #333333;
+}
+#connectStatus {
+    color: #FFFFFF;
+    background-color: #6a6a6a;
+    padding: 1%;
+}
+button{
+    background-color:#333333;
+    width:95%;
+    margin: 0 2.5%;
+}
+.boutons_login {
+    margin-top: 3%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.boutton_register {
+    width: 20%;
+    padding: 2%;
+    background-color: #9c9c9c;
+    border-radius: 15px;
+}
+.boutton_connexion {
+    width: 20%;
+    padding: 2%;
+    background-color: #4f8c9b;
+    border-radius: 15px;
+}
+#pseudoDiv {
+    background-color: #6f806d;
+    padding: 2%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    border-radius: 15px;
+}
+#connexion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+input{
+    background-color:#151515;
+}
+.input_connexion {
+    width: 60%;
+    padding: 1%;
+    border-radius: 15px;
+}
+.label_connexion {
+    margin: 1%;
+}
+#chatDiv{
+    display:none;
+    margin-bottom:10px;
+    height:60%;
+}
+#salonList{
+    border: 1px solid;
+    width: 70px;
+    min-height:60%;
+    padding:5px;
+    flex-direction: column;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+#salonList > *{
+    display:block;
+    margin-top:5px;
+    border-radius:50%;
+    font-size:16px;
+    background-color:grey;
+    height:50px;
+    width:50px;
+}
+#chat{
+    flex-grow:4;
+    resize:none;
+    background-color:#151515;
+    
+}
+#messageDiv > input[type='text']{
+    width : 100%;
+    height : 40px;
+    margin : 5px 0;
+    background-color:#151515;
+}
+#decoButton{
+    min-width: 15%;
+    margin-left: 50px;
+    max-width: 15%;
+}
