@@ -6,7 +6,7 @@
 		
 		
 	</head>
-	<body>
+	<body id="body">
     <p id="connectStatus" style="display:none">Non connecté</p>
     <div id="chatDiv">
         <div id="salonList">
@@ -24,10 +24,12 @@
 			<button class="boutton_register" onclick="register()">S'inscrire</button>
        		<button class="boutton_connexion" onclick="login()">Se connecter</button>
 		</div>
-		
+		<div>
+            <button onclick="resetPassword()">Réinitialiser le mot de passe</button>
+         </div>
        
     </div>
-
+    
     <!--<div id="usersInSalonDiv" style="display:none;">
         <h3>Utilisateurs dans le salon :</h3>
         <ul id="usersList">

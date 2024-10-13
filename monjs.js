@@ -31,8 +31,8 @@ function switchDisplay(){
 	document.getElementById("messageDiv").style.display = "block";
 	//document.getElementById("usersInSalonDiv").style.display = "block";
 	document.getElementById("chatDiv").style.display = "flex";
-	document.getElementById("connectStatus").innerHTML = "Connecté en temps que : " + pseudo + "<button id='decoButton' onclick='deconnect()'>Se déconnecter</button>" +"<button id='decoButton' onclick='inviteUserToSalon()'>Inviter</button>";
-	document.getElementById("chat").value="Selectionnez ou creer un salon à gauche ";
+	document.getElementById("connectStatus").innerHTML = "Connecté en temps que : " + pseudo + "<button id='decoButton' onclick='deconnect()'>Se déconnecter</button>" +"<button id='decoButton' onclick='inviteUserToSalon()'>Inviter</button>"+ "<button id='decoButton' onclick='removeUserFromSalon()'>Retirer un memebre</button>";
+	document.getElementById("chat").value="Selectionnez ou créer un salon à gauche ";
 	getSalonList();
 }
 
@@ -42,7 +42,6 @@ function deconnect(){
 }
 
 function register(){
-	//A refaire, mais flemme
 	let tempPseudo = window.prompt("Entrez votre login");
 	let mdp = window.prompt("Entrez votre mdp");
 	
@@ -59,6 +58,38 @@ function register(){
 	});
 	
 }
+function resetPassword() {
+    // Demander à l'utilisateur d'entrer son pseudo et le nouveau mot de passe
+    let tempPseudo = window.prompt("Entrez votre pseudo :");
+    let newPassword = window.prompt("Entrez votre nouveau mot de passe :");
+
+    // Vérifier que les deux valeurs ne sont pas vides
+    if (!tempPseudo || !newPassword) {
+        alert("Veuillez entrer un pseudo et un nouveau mot de passe valides.");
+        return;
+    }
+
+    // Appel AJAX pour envoyer les données au backend pour réinitialiser le mot de passe
+    $.ajax({
+        url: wsAdress, // Adresse du serveur (comme dans votre système existant)
+        type: "POST",
+        data: "pseudo=" + tempPseudo + "&newPassword=" + newPassword + "&operation=resetPassword",
+        success: function (msg, statut) {
+            // Afficher un message en fonction de la réponse reçue du serveur
+            console.log(msg);
+            let rep = JSON.parse(msg);
+            if (rep["errMsg"]) {
+                alert("Erreur : " + rep["errMsg"]);
+            } else {
+                alert("Le mot de passe a été réinitialisé avec succès.");
+            }
+        },
+        error: function (msg, statut, err) {
+            console.log("Erreur: ", msg);
+        }
+    });
+}
+
 
 function getMajMsg(){
 	if(selectedChat){
@@ -232,7 +263,6 @@ function inviteUserToSalon() {
                 return;
             }
 
-            // Envoi de la requête pour l'invitation
             callWithToken("POST", "invite", "salon=" + selectedSalon + "&user_id=" + selectedUserId, function (msg, statut) {
                 if (msg.errMsg) {
                     alert("Erreur : " + msg.errMsg);
@@ -246,18 +276,76 @@ function inviteUserToSalon() {
     }
 }
 
+function removeUserFromSalon() {
+    if (pseudo) {
+        // Obtenir la liste des salons pour le pseudo actuel
+        callWithToken("GET", "listSalon", "pseudo=" + pseudo, function (msg, statut) {
+            let salons = msg;
+            
+            // Vérifier s'il y a des salons disponibles
+            if (salons.length === 0) {
+                alert("Aucun salon disponible.");
+                return;
+            }
 
-// Fonction simulée pour récupérer la liste des utilisateurs
+            // Afficher la liste des salons et demander à l'utilisateur d'en choisir un
+            let salonListText = "Liste des salons :\n";
+            salons.forEach((salon, index) => {
+                salonListText += (index + 1) + ". " + salon + "\n";
+            });
+
+            let salonChoice = parseInt(window.prompt(salonListText + "Choisissez un salon (numéro) :"));
+            let selectedSalon = salons[salonChoice - 1];
+
+            // Vérifier si le salon sélectionné est valide
+            if (!selectedSalon) {
+                alert("Salon invalide.");
+                return;
+            }
+
+            // Obtenir la liste des utilisateurs dans ce salon
+            let users = getUsers();
+            let userListText = "Liste des utilisateurs :\n";
+            users.forEach((userId, index) => {
+                userListText += (index + 1) + ". " + userId + "\n";
+            });
+
+            // Demander à l'utilisateur de choisir un membre à retirer
+            let userChoice = parseInt(window.prompt(userListText + "Choisissez un utilisateur à retirer (numéro) :"));
+            let selectedUserId = users[userChoice - 1];
+
+            // Vérifier si l'utilisateur sélectionné est valide
+            if (!selectedUserId) {
+                alert("Utilisateur invalide.");
+                return;
+            }
+
+            // Envoi de la requête pour retirer l'utilisateur du salon
+            callWithToken("POST", "removeUser", "salon=" + selectedSalon + "&user_id=" + selectedUserId, function (msg, statut) {
+                if (msg.errMsg) {
+                    alert("Erreur : " + msg.errMsg);
+                } else {
+                    alert("L'utilisateur avec ID " + selectedUserId + " a été retiré du salon " + selectedSalon + " !");
+                }
+            });
+        });
+    } else {
+        alert("Vous devez être connecté pour retirer des utilisateurs.");
+    }
+}
+
+
+
 function getUsers() {
     let users = [];
     $.ajax({
-        url: 'scripts/users.json', // Spécifie le chemin vers ton fichier users.json
+        url: 'scripts/users.json', 
         dataType: 'json',
-        async: false, // Pour s'assurer que l'appel est terminé avant de continuer
+        async: false, 
         success: function(data) {
             for (let userId in data) {
                 if (data.hasOwnProperty(userId)) {
-                    users.push(userId); // On n'ajoute que le userId
+                    users.push(userId); 
                 }
             }
         },

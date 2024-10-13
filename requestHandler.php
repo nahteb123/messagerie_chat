@@ -8,7 +8,9 @@
 		"send" => "sendMsg.php",
 		"register" => "register.php",
 		"invite" => "inviteUser.php",
-		"listUsersInSalon" => "listUserInSalon.php"
+		"listUsersInSalon" => "listUserInSalon.php",
+		"resetPassword"  => "resetPassword.php",
+		"removeUser"  => "removeUser.php"
 	];
 	$routePath ="scripts/";
 	$response = array();
@@ -29,7 +31,7 @@
 		exit;
 	}
 	else{
-		if($currentOperation == "login" || $currentOperation == "register"){
+		if($currentOperation == "login" || $currentOperation == "register" || $currentOperation == "resetPassword"){
 			$authorized = true;
 		}
 		else if(isset($reqData["token"])){
@@ -43,10 +45,10 @@
 		$response["data"] = json_decode($respTemp);
 	}
 	
-	if(!isset($response["errMsg"]) && $authorized && $currentOperation != "login" && $currentOperation != "register"){
+	if(!isset($response["errMsg"]) && $authorized && $currentOperation != "login" && $currentOperation != "register" && $currentOperation != "resetPassword"){
 		$response["token"] = encodeToken($response["data"],$tokenData);
 	}
-	else if($currentOperation != "login" && $currentOperation != "register"){
+	else if($currentOperation != "login" && $currentOperation != "register" && $currentOperation != "resetPassword"){
 		echo json_encode(["errMsg" => "Token invalide","auth" => $authorized]);
 		exit;
 	}
