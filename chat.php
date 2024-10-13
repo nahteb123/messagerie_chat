@@ -23,11 +23,9 @@
 		<div class="boutons_login">
 			<button class="boutton_register" onclick="register()">S'inscrire</button>
        		<button class="boutton_connexion" onclick="login()">Se connecter</button>
+        <button class ="resetPassword" onclick="resetPassword()">Réinitialiser le mot de passe</button>
 		</div>
-		<div>
-            <button onclick="resetPassword()">Réinitialiser le mot de passe</button>
-         </div>
-       
+		
     </div>
     
     <!--<div id="usersInSalonDiv" style="display:none;">
