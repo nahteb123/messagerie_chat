@@ -45,6 +45,12 @@ button{
     background-color: #9c9c9c;
     border-radius: 15px;
 }
+.resetPassword {
+    width: 20%;
+    padding: 2%;
+    background-color: #333333;
+    border-radius: 15px;
+}
 .boutton_connexion {
     width: 20%;
     padding: 2%;
@@ -76,6 +82,9 @@ input{
 }
 .label_connexion {
     margin: 1%;
+    font-size: larger;
+    background-color: #b20000;
+    padding: 1%;
 }
 #chatDiv{
     display:none;
